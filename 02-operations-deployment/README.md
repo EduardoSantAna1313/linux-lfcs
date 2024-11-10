@@ -63,4 +63,38 @@ This command could produce 3 outputs:
 3. Disabled: Even the logs are disabled;
 
 
+## Change the SELinux Mode
 
+> $ sudo setenforce (0|1)
+
+0 - Permissive
+1 - Enforce
+
+
+## Change the context
+
+Lets change the context for a file:
+
+> $ sudo chcon -u unconfined_u /var/log/auth.log
+
+> $ sudo chcon -r object_r /var/log/auth.log
+
+> $ sudo chcon -t user_home_t /var/log/auth.log
+
+Change all the permissions on user, role and type (domain).
+
+## Generate Module with current permissions
+
+> $ sudo audit2allow --all -M my_module_name
+
+This command will produce 2 files:
+
+- my_module_name.pp
+- my_module_name.te
+
+The `.te` file is like an OPA `.rego`file.
+
+
+```
+allow unconfined_t self:process execheap;
+```
